@@ -1,0 +1,23 @@
+{
+  "name": "final-year-project",
+  "version": "1.0.0",
+  "description": "final year project for middlesex university course cst3990",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chenshanmugarajah/final-year-project.git"
+  },
+  "author": "chen shanmugarajah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chenshanmugarajah/final-year-project/issues"
+  },
+  "homepage": "https://github.com/chenshanmugarajah/final-year-project#readme",
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.2"
+  }
+}
