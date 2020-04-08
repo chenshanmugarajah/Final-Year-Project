@@ -4,7 +4,8 @@
   "description": "final year project for middlesex university course cst3990",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "once": "node server.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
