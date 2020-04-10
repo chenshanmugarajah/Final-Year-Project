@@ -37,22 +37,22 @@ app.get('/login', (req, res) => {
   res.render('login.ejs')
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   let password = req.body.password
   let username = req.body.username
+  let user = 'test';
 
-  let params = {
-    TableName: 'RedUsers',
-    Key: {
-      username: username
-    }
+  try {
+    user = (await getUser(username)).Items[0]
+  } catch {
+    console.log('error')
   }
 
-  documentClient.get(params, (err, data) => {
-    if (err) console.log(err)
-    if (JSON.stringify(data) == '') console.log('no user')
-    else console.log(data)
-  })
+  if(typeof user == "undefined") {
+    res.redirect('/register')
+  } else {
+    console.log(await bcrypt.compare(password, user.password));
+  }
 
 })
 
@@ -61,23 +61,24 @@ app.get('/register', (req, res) => {
 })
 
 app.post('/register', async (req, res) => {
-  let password = await bcrypt.hash(req.body.password, 10)
+
   let username = req.body.username
-  let id = generateRowId(4);
+  let password = await bcrypt.hash(req.body.password, 10)
 
-  let result = await getUser(id, username, req.body.password);
-  
-  let json = JSON.stringify(result);
+  try {
+    user = (await getUser(username)).Items[0];
+  } catch (err) {
+    console.log('caught something :)')
+  }
 
-  if (json !== "{}") {
+  if(typeof user !== "undefined") {
     res.redirect('/login')
-    return
+    return;
   }
 
   let params = {
     TableName: 'RedUsers',
     Item: {
-      id: id,
       username: username,
       password: password
     }
@@ -91,25 +92,16 @@ app.post('/register', async (req, res) => {
 })
 
 // get user from dynamodb
-async function getUser(id, username, password) {
-
+async function getUser(username) {
   let params = {
-    Key: {
-      id: id,
-      username: username
-    },
-    TableName: "RedUsers"
+    TableName: 'RedUsers',
+    FilterExpression: 'username = :username',
+    ExpressionAttributeValues: {':username' : username}
   }
 
-  return await documentClient.get(params).promise();
-}
+  let data  = await documentClient.scan(params, (err, data) => {
+    if (err) console.log(err)
+  }).promise()
 
-// unique id
-let CUSTOMEPOCH = 1300000000000; // artificial epoch
-function generateRowId(shardId /* range 0-64 for shard/slot */) {
-  let ts = new Date().getTime() - CUSTOMEPOCH; // limit to recent
-  let randid = Math.floor(Math.random() * 512);
-  ts = (ts * 64);   // bit-shift << 6
-  ts = ts + shardId;
-  return (ts * 512) + (randid % 512);
+  return data;
 }
