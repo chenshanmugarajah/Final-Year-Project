@@ -1,6 +1,12 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
 const bcrypt = require('bcryptjs')
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.listen(3000)
 
 // change to database
 const users = []
@@ -19,12 +25,7 @@ app.get('/register', (req, res) => {
   res.render('register.ejs')
 })
 
-app.post('/register', async (req, res) => {
-  try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10)
-  } catch {
-    
-  }
+app.post('/register', (req, res) => {
+  let password = req.body.password
+  console.log(password)
 })
-
-app.listen(3000)
