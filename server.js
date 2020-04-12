@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
+// consts
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
@@ -36,26 +37,26 @@ AWS.config.update({
 const documentClient = new AWS.DynamoDB.DocumentClient()
 
 // routes
-app.get('/', async (req, res) => {
+app.get('/', checkAuthenticated, async (req, res) => {
   const user = (await req.user).Items[0]
   res.render('index.ejs', {username : user.username} )
 })
 
-app.get('/login', (req, res) => {
+app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login.ejs')
 })
 
-app.get('/register', (req, res) => {
+app.get('/register', checkNotAuthenticated, (req, res) => {
   res.render('register.ejs')
 })
 
-app.post('/login', passport.authenticate('local', {
+app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true
 }))
 
-app.post('/register', async (req, res) => {
+app.post('/register', checkNotAuthenticated, async (req, res) => {
 
   let username = req.body.username
   let password = req.body.password
@@ -103,8 +104,19 @@ async function getUser(username) {
   return data;
 }
 
-async function getUsers() {
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next()
+  }
 
+  res.redirect('/login')
+}
+
+function checkNotAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return res.redirect('/')
+  }
+  next()
 }
 
 // server
