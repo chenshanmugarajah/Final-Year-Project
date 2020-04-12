@@ -11,6 +11,7 @@ const AWS = require('aws-sdk')
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
+const methodOverride = require('method-override')
 
 // passport set up
 const initializePassport = require('./passport-config')
@@ -28,6 +29,7 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(methodOverride('_method'))
 
 // AWS config
 AWS.config.update({
@@ -118,6 +120,11 @@ function checkNotAuthenticated(req, res, next) {
   }
   next()
 }
+
+app.delete('/logout', (req, res) => {
+  req.logOut()
+  res.redirect('/login')
+})
 
 // server
 app.listen(3000)
