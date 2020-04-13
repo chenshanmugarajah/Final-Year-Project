@@ -126,5 +126,9 @@ app.delete('/logout', (req, res) => {
   res.redirect('/login')
 })
 
+app.get('/voting', (req, res) => {
+  res.render('voting.ejs')
+})
+
 // server
 app.listen(3000)
