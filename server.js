@@ -126,8 +126,9 @@ app.delete('/logout', (req, res) => {
   res.redirect('/login')
 })
 
-app.get('/voting', (req, res) => {
-  res.render('voting.ejs')
+app.get('/voting', checkAuthenticated, async (req, res) => {
+  const user = (await req.user).Items[0]
+  res.render('voting.ejs', {username: user.username})
 })
 
 // server

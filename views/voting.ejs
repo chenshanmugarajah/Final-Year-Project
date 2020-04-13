@@ -1,89 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RED - Rapid Education Development</title>
-</head>
-<body>
-<div class="grid-container">
+  </head>
+  <body>
 
-    <div class="header">
+    <div id="username" style="display:none"><%= username %></div>
+
+    <div class="grid-container">
+
+      <div class="header">
         <div class="title">
-            <h2>RAPID</h2>
-            <h2>EDUCATION</h2>
-            <h2>DEVELOPMENT</h2>
+          <h2>RAPID</h2>
+          <h2>EDUCATION</h2>
+          <h2>DEVELOPMENT</h2>
         </div>
         <div class="nav">
-            <ul>
-                <form action="/logout?_method=DELETE" method="POST">
-                  <button type="submit">Log Out</button>
-                </form>
-            </ul>
+          <ul>
+            <form action="/logout?_method=DELETE" method="POST">
+              <button type="submit">Log Out</button>
+            </form>
+          </ul>
         </div>
-    </div>
+      </div>
 
-    <div class="tiles-container">
+      <div class="tiles-container">
         <h1>Click on what you would like to see more of from the teacher</h1>
         <div id="tiles-wrapper">
-            <button id="louder">louder</button>
-            <button id="clearer">clearer</button>
-            <button id="slower">slower</button>
-            <button id="explane">explain</button>
-            <button id="faster">faster</button>
-            <button id="break">break</button>
-            <button id="goback">go back</button>
-            <button id="question">question</button>
+          <button id="louder">louder</button>
+          <button id="clearer">clearer</button>
+          <button id="slower">slower</button>
+          <button id="explane">explain</button>
+          <button id="faster">faster</button>
+          <button id="break">break</button>
+          <button id="goback">go back</button>
+          <button id="question">question</button>
         </div>
-    </div>
+      </div>
 
-    <div class="footer">
+      <div class="footer">
         <p>made by chen</p>
+      </div>
     </div>
-</div>
-<script>
 
-const votes = {}
-const wrapper = document.getElementById("tiles-wrapper");
+    <script>
+      const votes = {};
+      const wrapper = document.getElementById("tiles-wrapper");
+      votes.username = document.getElementById('username').textContent;
 
-wrapper.addEventListener("click", event => {
+      wrapper.addEventListener("click", (event) => {
+        const isButton = event.target.nodeName === "BUTTON";
 
-  const isButton = event.target.nodeName === "BUTTON";
+        if (!isButton) {
+          return;
+        } else {
+          const choice = event.target.id;
 
-  if (!isButton) {
-    return;
-  } else {
+          if (typeof votes[choice] == "undefined") {
+            votes[choice] = 0;
+          }
 
-    const choice = event.target.id;
-    
-    if(typeof votes[choice] == "undefined") {
-      votes[choice] = 0;
-    }
+          votes[choice] += 1;
+          console.log(votes);
 
-    votes[choice] += 1
-    console.log(votes)
+          event.preventDefault();
+        }
+      });
 
-    event.preventDefault();
-  }
-  
-});
 
-let connection = new WebSocket("wss://a31vmdscn7.execute-api.us-east-1.amazonaws.com/dev");
 
-connection.onopen = (event) => {
-  console.log('connected!')
-}
+      var connection = new WebSocket(
+        "wss://a31vmdscn7.execute-api.us-east-1.amazonaws.com/dev"
+      );
 
-connection.onerror = (error) => {
-  console.log('ERROR')
-  console.log(error)
-}
+      connection.onopen = (event) => {
+        console.log("connected!");
+      };
 
-connection.onmessage = (response) => {
-  console.log('REPSONSE')
-  console.log(response)
-}
+      function getCryptoData() {
+        let dataObj = {
+          action: "wsCryptoData", //"getData"
+        };
+        connection.send(JSON.stringify(dataObj));
+        console.log("Requesting cryptoData");
+      }
 
-</script>
-</body>
+      //IMPLEMENTING
+      function storeVotes() {
+        
+      }
+
+      connection.onerror = (error) => {
+        console.log("ERROR");
+        console.log(error);
+      };
+
+      connection.onmessage = (response) => {
+        console.log("REPSONSE");
+        console.log(response);
+      };
+    </script>
+  </body>
 </html>
