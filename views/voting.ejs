@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RED - Rapid Education Development</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </head>
   <body>
 
@@ -43,12 +44,16 @@
       <div class="footer">
         <p>made by chen</p>
       </div>
+
+      <div id="test"></div>
+
+      <div id="plotdiv"></div>
     </div>
 
     <script>
       const votes = {};
       const wrapper = document.getElementById("tiles-wrapper");
-      votes.username = document.getElementById('username').textContent;
+      const username = document.getElementById('username').textContent;
 
       wrapper.addEventListener("click", (event) => {
         const isButton = event.target.nodeName === "BUTTON";
@@ -77,20 +82,30 @@
 
       connection.onopen = (event) => {
         console.log("connected!");
+        storeVotes();
       };
 
-      function getCryptoData() {
-        let dataObj = {
-          action: "wsCryptoData", //"getData"
-        };
-        connection.send(JSON.stringify(dataObj));
-        console.log("Requesting cryptoData");
+      let msg = {
+        username: username,
+        votes: votes
       }
 
       //IMPLEMENTING
       function storeVotes() {
-        
+
+        let dataObj = {
+          action: "storeVotes",
+          data: msg
+        }
+
+        connection.send(JSON.stringify(dataObj));
+
+        console.log('message sent');
       }
+
+      setInterval(() => {
+        storeVotes()
+      }, 60000);
 
       connection.onerror = (error) => {
         console.log("ERROR");
@@ -99,8 +114,32 @@
 
       connection.onmessage = (response) => {
         console.log("REPSONSE");
-        console.log(response);
+        plotData(response.data);
       };
+
+      function plotData(data) {
+        const plotDiv = document.getElementById('plotdiv')
+
+        let myData = JSON.parse(data)
+
+        let xData = []
+        for (let propety in myData.votes) {
+          xData.push(propety)
+        }
+
+        let yData = []
+        for (let propety in myData.votes) {
+          yData.push(myData.votes[propety])
+        }
+
+        let data1 = [{
+          x: xData,
+          y: yData,
+          type: 'bar'
+        }];
+
+        Plotly.newPlot(plotDiv, data1);
+      }
     </script>
   </body>
 </html>
