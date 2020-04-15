@@ -35,7 +35,7 @@
           <button id="slower">slower</button>
           <button id="explane">explain</button>
           <button id="faster">faster</button>
-          <button id="break">break</button>
+          <button id="breaktime">break</button>
           <button id="goback">go back</button>
           <button id="question">question</button>
         </div>
@@ -51,47 +51,77 @@
     </div>
 
     <script>
-      const votes = {};
+
+      let votes = {};
       const wrapper = document.getElementById("tiles-wrapper");
       const username = document.getElementById('username').textContent;
+      const connection = new WebSocket("wss://a31vmdscn7.execute-api.us-east-1.amazonaws.com/dev");
+
+      connection.onopen = (event) => {
+        console.log("connected!");
+        getUserData();
+      };
+
+      connection.onerror = (error) => {
+        console.log("ERROR");
+        console.log(error);
+      };
+
+      connection.onmessage = (response) => {
+        let thisRes = JSON.parse(response.data);
+
+        if(thisRes.name == "getUserData") {
+          votes = thisRes.data;
+          plotData(votes)
+        }
+
+
+      };
 
       wrapper.addEventListener("click", (event) => {
         const isButton = event.target.nodeName === "BUTTON";
-
         if (!isButton) {
           return;
         } else {
           const choice = event.target.id;
-
-          if (typeof votes[choice] == "undefined") {
-            votes[choice] = 0;
-          }
-
           votes[choice] += 1;
-          console.log(votes);
-
           event.preventDefault();
         }
+        plotData(votes)
+        storeVotes()
       });
 
+      function plotData(data) {
+        const plotDiv = document.getElementById('plotdiv');
+        let myData = data
+        delete myData.password
+        delete myData.username
 
+        let xData = []
+        for (let propety in myData) {
+          xData.push(propety)
+        }
 
-      var connection = new WebSocket(
-        "wss://a31vmdscn7.execute-api.us-east-1.amazonaws.com/dev"
-      );
+        let yData = []
+        for (let propety in myData) {
+          yData.push(myData[propety])
+        }
 
-      connection.onopen = (event) => {
-        console.log("connected!");
-        storeVotes();
-      };
+        let data1 = [{
+          x: xData,
+          y: yData,
+          type: 'bar'
+        }];
 
-      let msg = {
-        username: username,
-        votes: votes
+        Plotly.newPlot(plotDiv, data1);
       }
 
-      //IMPLEMENTING
       function storeVotes() {
+
+        let msg = {
+          username: username,
+          votes: votes
+        }
 
         let dataObj = {
           action: "storeVotes",
@@ -103,43 +133,24 @@
         console.log('message sent');
       }
 
-      setInterval(() => {
-        storeVotes()
-      }, 60000);
+      function getUserData() {
 
-      connection.onerror = (error) => {
-        console.log("ERROR");
-        console.log(error);
-      };
-
-      connection.onmessage = (response) => {
-        console.log("REPSONSE");
-        plotData(response.data);
-      };
-
-      function plotData(data) {
-        const plotDiv = document.getElementById('plotdiv')
-
-        let myData = JSON.parse(data)
-
-        let xData = []
-        for (let propety in myData.votes) {
-          xData.push(propety)
+        let msg = {
+          username: username
         }
 
-        let yData = []
-        for (let propety in myData.votes) {
-          yData.push(myData.votes[propety])
+        let dataObj = {
+          action: "getUserVotes",
+          data: msg
         }
 
-        let data1 = [{
-          x: xData,
-          y: yData,
-          type: 'bar'
-        }];
-
-        Plotly.newPlot(plotDiv, data1);
+        connection.send(JSON.stringify(dataObj))
       }
+
+      // setInterval(() => {
+      //   storeVotes()
+      // }, 10000);
+
     </script>
   </body>
 </html>

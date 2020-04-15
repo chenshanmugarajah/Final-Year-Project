@@ -75,7 +75,15 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
         TableName: 'RedUsers',
         Item: {
           username: username,
-          password: hashedpassword
+          password: hashedpassword,
+          louder: 0,
+          clearer: 0,
+          slower: 0,
+          explane: 0,
+          faster: 0,
+          breaktime: 0,
+          goback: 0,
+          question: 0
         }
       };
     
