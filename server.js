@@ -48,8 +48,12 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login.ejs')
 })
 
-app.get('/register', checkNotAuthenticated, (req, res) => {
-  res.render('register.ejs')
+app.get('/register', checkNotAuthenticated, checkConsent, (req, res) => {
+  if (consent.data && consent.participation) {
+    res.render('register.ejs')
+  } else {
+    res.redirect('/data-consent')
+  }
 })
 
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
@@ -122,6 +126,21 @@ function checkAuthenticated(req, res, next) {
   res.redirect('/login')
 }
 
+let consent = {
+  data: false,
+  participation: false
+}
+
+function checkConsent(req, res, next) {
+  if(consent.data == false) {
+    res.redirect('/data-consent')
+  } else if (consent.participation == false) {
+    res.redirect('/participation-consent')
+  } else {
+    return next();
+  }
+}
+
 function checkNotAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return res.redirect('/')
@@ -131,6 +150,8 @@ function checkNotAuthenticated(req, res, next) {
 
 app.delete('/logout', (req, res) => {
   req.logOut()
+  consent.data = false
+  consent.participation = false
   res.redirect('/login')
 })
 
@@ -139,5 +160,25 @@ app.get('/voting', checkAuthenticated, async (req, res) => {
   res.render('voting.ejs', {username: user.username})
 })
 
+app.get('/data-consent', (req, res) => {
+  res.render('data-consent.ejs')
+})
+
+app.post('/data-consent', (req, res) => {
+  consent.data = true;
+  res.redirect('/participation-consent')
+})
+
+app.get('/participation-consent', (req, res) => {
+  res.render('data.participation.ejs')
+})
+
+app.post('/participation-consent', (req, res) => {
+  consent.participation = true;
+  console.log(consent)
+  res.redirect('/register')
+})
 // server
-app.listen(3000)
+app.listen(3000, () => {
+  console.log('\nServer started on port: 3000\n')
+})
