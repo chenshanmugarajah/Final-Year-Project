@@ -178,7 +178,11 @@ app.post('/participation-consent', (req, res) => {
   console.log(consent)
   res.redirect('/register')
 })
+
+app.get('/results', checkAuthenticated, (req, res) => {
+  res.render('results.ejs')
+})
 // server
 app.listen(3000, () => {
-  console.log('\nServer started on port: 3000\n')
+  console.log('Server started: http://localhost:3000')
 })

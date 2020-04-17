@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results Dashboard</title>
+</head>
+<body>
+<div class="grid-container">
+  <div id="five-minute-average-votes" class="small-tile">
+    <h1>Five minute average</h1>
+  </div>
+  <div id="total-votes" class="small-tile">
+    <h1>Total Votes</h1>
+  </div>
+  <div id="lesson-average-votes" class="small-tile">
+    <h1>Lesson average Votes</h1>
+  </div>
+
+  <div id="main-chart" class="big-tile">
+    <h1>Main chart</h1>
+  </div>
+
+  <div id="most-active" class="small-tile">
+    <h1>Most active student</h1>
+  </div>
+  <div id="least-active" class="small-tile">
+    <h1>Least active student</h1>
+  </div>
+  <div id="class-emotion" class="small-tile">
+    <h1>Class emotion</h1>
+  </div>
+</div>
+</body>
+<script>
+  const connection = new WebSocket("wss://a31vmdscn7.execute-api.us-east-1.amazonaws.com/dev");
+  connection.onopen = (event) => {
+    console.log("connected!");
+    getAllData()
+  };
+
+  connection.onerror = (error) => {
+    console.log("websocket error");
+  };
+
+  connection.onmessage = (response) => {
+    console.log("message recieved")
+    const data = (JSON.parse(response.data)).data
+    createUsersArray(data)
+  };
+
+  // WebSocket Messages
+  function getAllData () {
+    console.log('Trying to get all data')
+    let dataObj = {
+      action: "getAllData"
+    };
+    connection.send(JSON.stringify(dataObj))
+  }
+
+  // WebSocket response handling
+  // all users and data
+  let users = {}
+  let totalVotes = {}
+  let intTotalVotes = 0
+
+  function createUsersArray (data) {
+    for (let user in data) {
+      const username = data[user].username
+      delete data[user].username
+      delete data[user].password
+      users[username] = data[user]
+    }
+    console.log(users)
+
+    let userTotalVotes = 0
+    for (let user in users) {
+      let thisUser = users[user]
+      for (let data in users[user]) {
+        console.log(thisUser)
+      }
+    }
+    getTotalVotes()   
+  }
+
+  function getTotalVotes () {
+    let timeStamp = Math.floor(Date.now() / 1000);
+    totalVotes[timeStamp] = {}
+
+    for(let user in users) {
+      let userData = users[user]
+      delete userData.username
+
+      for (let data in userData){
+        if(totalVotes[data] == undefined) {
+          totalVotes[timeStamp][data] = 0;
+        }
+      }
+      for (let data in userData){
+        totalVotes[timeStamp][data] += userData[data]
+        intTotalVotes += userData[data]
+      }
+    }
+  }
+
+  let collatedVotes = []
+
+  
+  
+
+  // setInterval(() => {
+  //   getAllData()
+  // }, 60000);
+
+</script>
+</html>
