@@ -87,6 +87,4 @@ function mostVoted (user) {
   return dataArr[0].name
 }
 
-setInterval(() => {
-  getUsers(users)
-}, 5000);
+getUsers(users)
