@@ -11,6 +11,7 @@ console.log('\nTest file\n')
 
 let collatedVotes = {}
 let usersList = {}
+
 let usersTotalVotes = {}
 
 let ts = 0;
@@ -38,24 +39,23 @@ let ts = 0;
 function getUsers (users) {
   usersList[ts] = []
   collatedVotes[ts] = []
-  usersTotalVotes[ts] = 0
+  //usersTotalVotes[ts] = 0
   for (let user in users) {
     usersList[ts][user] = {
       votes: users[user],
       mostVoted: mostVoted(users[user]),
       totalVotes: totVotes(users[user])
     }
-    collateVotes(user)
   }
-  console.log(usersList)
-  console.log(usersTotalVotes)
+  for (let ts in usersList) {
+    let ul = usersList[ts]
+    for(let user in ul) {
+      collatedVotes[ts] = {
+        totalVotes = totalVotes + ul[user].totalVotes
+      }
+    }
+  }
   ts += 5
-}
-
-function collateVotes(user) {
-  for (let data in user) {
-    collatedVotes[ts] 
-  }
 }
 
 function totVotes (user) {
@@ -63,7 +63,7 @@ function totVotes (user) {
   for(let data in user) {
     total += user[data]
   }
-  usersTotalVotes[ts] += total
+  //usersTotalVotes[ts] += total
   return total
 }
 
