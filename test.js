@@ -1,45 +1,18 @@
-let users = {
-  "chen": { 
-    "explane":2,"question":1,"goback":1,"louder":0,"slower":0,"faster":0,"clearer":0,"breaktime":3
-  },
-  "test": {
-    "explane":2,"question":3,"goback":0,"louder":0,"slower":3,"faster":0,"clearer":0,"breaktime":0
-  }
-}
-
-console.log('\nTest file\n')
-
-let collatedVotes = {}
 let usersList = {}
-
-let usersTotalVotes = {}
-
+let totalUserVotes = {}
 let ts = 0;
-
-// collatedVotes[ts] = {
-//   votes: {
-//     explane: 1,
-//     faster: 2
-//   },
-//   mostVoted: "faster",
-//   intVotes: 3
-// }
-
-// usersList[ts] = {
-//   username: {
-//     votes: {
-//       explane: 1,
-//       faster: 2
-//     },
-//     mostVoted: 'faster',
-//     totalVotes: 3
-//   }
-// }
+let bestStudent = {
+  name: "",
+  points: 0
+}
+let worstStudent = {
+  name: "",
+  points: 10000
+}
 
 function getUsers (users) {
   usersList[ts] = []
-  collatedVotes[ts] = []
-  //usersTotalVotes[ts] = 0
+  totalUserVotes[ts] = 0
   for (let user in users) {
     usersList[ts][user] = {
       votes: users[user],
@@ -47,15 +20,17 @@ function getUsers (users) {
       totalVotes: totVotes(users[user])
     }
   }
-  for (let ts in usersList) {
-    let ul = usersList[ts]
-    for(let user in ul) {
-      collatedVotes[ts] = {
-        totalVotes = totalVotes + ul[user].totalVotes
-      }
+  for(let user in usersList[ts]) {
+    if(bestStudent.points < usersList[ts][user].totalVotes) {
+      bestStudent.name = user,
+      bestStudent.points = usersList[ts][user].totalVotes
     }
+    if(worstStudent.points > usersList[ts][user].totalVotes) {
+      worstStudent.name = user,
+      worstStudent.points = usersList[ts][user].totalVotes
+    } 
   }
-  ts += 5
+  // ts += 5
 }
 
 function totVotes (user) {
@@ -63,7 +38,7 @@ function totVotes (user) {
   for(let data in user) {
     total += user[data]
   }
-  //usersTotalVotes[ts] += total
+  totalUserVotes[ts] += total
   return total
 }
 
@@ -88,3 +63,7 @@ function mostVoted (user) {
 }
 
 getUsers(users)
+
+document.getElementById("best-student-div").innerHTML += bestStudent.name;
+document.getElementById("worst-student-div").innerHTML += worstStudent.name;
+document.getElementById("total-votes-div").innerHTML += totalUserVotes[ts];
