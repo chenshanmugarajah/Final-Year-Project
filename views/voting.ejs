@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RED - Rapid Education Development</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="styles.css" rel="stylesheet" type="text/css">
   </head>
+
   <body>
-
+    
+    <div class="container">
     <div id="username" style="display:none"><%= username %></div>
-
-    <div class="grid-container">
 
       <div class="header">
         <div class="title">
@@ -23,28 +24,32 @@
           <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/results">Results</a></li>
-            <form action="/logout?_method=DELETE" method="POST">
-              <button type="submit">Log Out</button>
-            </form>
+            <li>
+              <form action="/logout?_method=DELETE" method="POST">
+                <button type="submit">Log Out</button>
+              </form>
+            </li>
           </ul>
         </div>
       </div>
 
-      <div class="tiles-container">
+      <div class="main tiles-container">
         <h1>Click on what you would like to see more of from the teacher</h1>
         <div id="tiles-wrapper">
-          <button id="louder">louder</button>
-          <button id="clearer">clearer</button>
-          <button id="slower">slower</button>
           <button id="explane">explain</button>
-          <button id="faster">faster</button>
-          <button id="breaktime">break</button>
-          <button id="goback">go back</button>
           <button id="question">question</button>
+          <button id="goback">go back</button>
+          <button id="louder">louder</button>
+          <button id="slower">slower</button>
+          <button id="faster">faster</button>
+          <button id="clearer">clearer</button>
+          <button id="breaktime">break</button>
+          
+          
         </div>
       </div>
 
-      <div class="footer" id="plotdiv"></div>
+      <div class="bottom" id="plotdiv"></div>
 
     </div>
 
@@ -97,6 +102,17 @@
 
         let xData = []
         for (let propety in myData) {
+          if(propety == "explane"){
+            propety = "explain"
+          }
+          if(propety == "breaktime"){
+            propety = "break"
+          }
+          if(propety == "goback"){
+            propety = "go back"
+          }
+          propety = propety.toUpperCase()
+
           xData.push(propety)
         }
 

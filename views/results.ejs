@@ -1,178 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Results Dashboard</title>
-  <link href="style.css" rel="stylesheet" type="text/css">
-</head>
-<body>
-<div class="grid-container">
-  <div class="header">
-    <div class="title">
-      <h2>RAPID</h2>
-      <h2>EDUCATION</h2>
-      <h2>DEVELOPMENT</h2>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Results Dashboard</title>
+    <link href="resultspagestyles.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+
+    <div class="container">
+
+      <div class="header">
+        <div class="title">
+          <h2>RAPID</h2>
+          <h2>EDUCATION</h2>
+          <h2>DEVELOPMENT</h2>
+        </div>
+        <div class="nav">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/Voting">Voting</a></li>
+            <li>
+              <form action="/logout?_method=DELETE" method="POST">
+                <button type="submit">Log Out</button>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="five-minute-average-votes" class="small-tile">
+        <h1>Five minute average</h1>
+      </div>
+      <div id="total-votes" class="small-tile">
+        <h1>Total Votes</h1>
+      </div>
+      <div id="lesson-average-votes" class="small-tile">
+        <h1>Lesson average Votes</h1>
+      </div>
+
+      <div id="main-chart" class="big-tile">
+        <h1>Main chart</h1>
+      </div>
+
+      <div id="most-active" class="small-tile">
+        <h1>Most active student</h1>
+      </div>
+      <div id="least-active" class="small-tile">
+        <h1>Least active student</h1>
+      </div>
+      <div id="class-emotion" class="small-tile">
+        <h1>Class emotion</h1>
+      </div>
+      
     </div>
-    <div class="nav">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/Voting">Voting</a></li>
-        <form action="/logout?_method=DELETE" method="POST">
-          <button type="submit">Log Out</button>
-        </form>
-      </ul>
-    </div>
-  </div>
-  <div id="five-minute-average-votes" class="small-tile">
-    <h1>Five minute average</h1>
-  </div>
-  <div id="total-votes" class="small-tile">
-    <h1>Total Votes</h1>
-  </div>
-  <div id="lesson-average-votes" class="small-tile">
-    <h1>Lesson average Votes</h1>
-  </div>
-
-  <div id="main-chart" class="big-tile">
-    <h1>Main chart</h1>
-  </div>
-
-  <div id="most-active" class="small-tile">
-    <h1>Most active student</h1>
-  </div>
-  <div id="least-active" class="small-tile">
-    <h1>Least active student</h1>
-  </div>
-  <div id="class-emotion" class="small-tile">
-    <h1>Class emotion</h1>
-  </div>
-</div>
-</body>
-<script>
-  const connection = new WebSocket("wss://a31vmdscn7.execute-api.us-east-1.amazonaws.com/dev");
-  connection.onopen = (event) => {
-    console.log("connected!");
-    getAllData()
-  };
-
-  connection.onerror = (error) => {
-    console.log("websocket error");
-  };
-
-  connection.onmessage = (response) => {
-    console.log("message recieved")
-    const data = (JSON.parse(response.data)).data
-    getUsers(data)
-    updateData()
-    // setInterval(() => {
-    //   getUsers(data)
-    //   updateData()
-    //   ts += 5;
-    // }, 10000);
-  };
-
-  // WebSocket Messages
-  function getAllData () {
-    console.log('Trying to get all data')
-    let dataObj = {
-      action: "getAllData"
+  </body>
+  <script>
+    const connection = new WebSocket(
+      "wss://a31vmdscn7.execute-api.us-east-1.amazonaws.com/dev"
+    );
+    connection.onopen = (event) => {
+      console.log("connected!");
+      getAllData();
     };
-    connection.send(JSON.stringify(dataObj))
-  }
 
-  let usersList = {}
-  let totalUserVotes = {}
-  let ts = 0;
-  let bestStudent = {
-    name: "",
-    points: 0
-  }
-  let worstStudent = {
-    name: "",
-    points: 10000
-  }
-  let chartData = {}
+    connection.onerror = (error) => {
+      console.log("websocket error");
+    };
 
-  function getUsers (users) {
-    console.log("creating users list")
-    usersList[ts] = []
-    totalUserVotes[ts] = 0
+    connection.onmessage = (response) => {
+      console.log("message recieved");
+      const data = JSON.parse(response.data).data;
+      getUsers(data);
+      updateData();
+      // setInterval(() => {
+      //   getUsers(data)
+      //   updateData()
+      //   ts += 5;
+      // }, 10000);
+    };
 
-    for (let user in users) {
-      delete users[user].password
-      let username = users[user].username
-      delete users[user].username
-      usersList[ts][username] = {
-        votes: users[user],
-        mostVoted: mostVoted(users[user]),
-        totalVotes: totVotes(users[user])
-      }
+    // WebSocket Messages
+    function getAllData() {
+      console.log("Trying to get all data");
+      let dataObj = {
+        action: "getAllData",
+      };
+      connection.send(JSON.stringify(dataObj));
     }
 
-    for(let user in users) {
-      let user1 = users[user]
-      for (let data in user1) {
-        if(isNaN(chartData[data])) {
-          chartData[data] = 0
-          chartData[data] += user1[data]
-        } else {
-          chartData[data] += user1[data]
+    let usersList = {};
+    let totalUserVotes = {};
+    let ts = 0;
+    let bestStudent = {
+      name: "",
+      points: 0,
+    };
+    let worstStudent = {
+      name: "",
+      points: 10000,
+    };
+    let chartData = {};
+
+    function getUsers(users) {
+      console.log("creating users list");
+      usersList[ts] = [];
+      totalUserVotes[ts] = 0;
+
+      for (let user in users) {
+        delete users[user].password;
+        let username = users[user].username;
+        delete users[user].username;
+        usersList[ts][username] = {
+          votes: users[user],
+          mostVoted: mostVoted(users[user]),
+          totalVotes: totVotes(users[user]),
+        };
+      }
+
+      for (let user in users) {
+        let user1 = users[user];
+        for (let data in user1) {
+          if (isNaN(chartData[data])) {
+            chartData[data] = 0;
+            chartData[data] += user1[data];
+          } else {
+            chartData[data] += user1[data];
+          }
         }
       }
-    }
 
-    for(let user in usersList[ts]) {
-      if(bestStudent.points < usersList[ts][user].totalVotes) {
-        bestStudent.name = user,
-        bestStudent.points = usersList[ts][user].totalVotes
+      for (let user in usersList[ts]) {
+        if (bestStudent.points < usersList[ts][user].totalVotes) {
+          (bestStudent.name = user),
+            (bestStudent.points = usersList[ts][user].totalVotes);
+        }
+        if (worstStudent.points > usersList[ts][user].totalVotes) {
+          (worstStudent.name = user),
+            (worstStudent.points = usersList[ts][user].totalVotes);
+        }
       }
-      if(worstStudent.points > usersList[ts][user].totalVotes) {
-        worstStudent.name = user,
-        worstStudent.points = usersList[ts][user].totalVotes
-      } 
+
+      console.log(chartData);
     }
 
-    console.log(chartData)
-  }
-
-  function totVotes (user) {
-    let total = 0;
-    for(let data in user) {
-      total += user[data]
-    }
-    totalUserVotes[ts] += total
-    return total
-  }
-
-  function mostVoted (user) {
-    let dataArr = []
-    for(let data in user) {
-      dataArr.push({
-        name: data,
-        value: user[data]
-      })
-    }
-    dataArr.sort(function (a, b) {
-      if (a.value > b.value) {
-        return -1
-      } else if (b.value > a.value) {
-        return +1
-      } else {
-        return 0
+    function totVotes(user) {
+      let total = 0;
+      for (let data in user) {
+        total += user[data];
       }
-    })
-    return dataArr[0].name
-  }
+      totalUserVotes[ts] += total;
+      return total;
+    }
 
-  function updateData () {
-    document.getElementById("most-active").innerHTML = "Most active student: " + bestStudent.name;
-    document.getElementById("least-active").innerHTML = "Least active student: " + worstStudent.name;
-    document.getElementById("total-votes").innerHTML = "Total votes: " + totalUserVotes[ts];
-    // console.log(bestStudent.name)
-    // console.log(worstStudent.name)
-    // console.log(totalUserVotes)
-  }
+    function mostVoted(user) {
+      let dataArr = [];
+      for (let data in user) {
+        dataArr.push({
+          name: data,
+          value: user[data],
+        });
+      }
+      dataArr.sort(function (a, b) {
+        if (a.value > b.value) {
+          return -1;
+        } else if (b.value > a.value) {
+          return +1;
+        } else {
+          return 0;
+        }
+      });
+      return dataArr[0].name;
+    }
 
-</script>
+    function updateData() {
+      document.getElementById("most-active").innerHTML =
+        "Most active student: " + bestStudent.name;
+      document.getElementById("least-active").innerHTML =
+        "Least active student: " + worstStudent.name;
+      document.getElementById("total-votes").innerHTML =
+        "Total votes: " + totalUserVotes[ts];
+    }
+  </script>
 </html>

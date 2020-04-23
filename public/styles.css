@@ -1,8 +1,4 @@
 body {
-    background-color: aqua;
-}
-
-/* body {
     font-family: sans-serif;
     margin: 0;
     padding: 0;
@@ -12,7 +8,7 @@ body .container {
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-rows: 140px auto 30%;
+    grid-template-rows: 140px auto 400px;
     grid-template-areas: "header", "main", "bottom";
 }
 
@@ -54,16 +50,25 @@ body .container {
     letter-spacing: 1px;
 }
 
-.voting-tiles {
+.nav ul li button {
+    color: white;
+    background-color: #254a71;
+    border: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.tiles-container {
     grid-area: "main";
     align-content: center;
 }
 
-.voting-tiles h1 {
+.tiles-container h1 {
     margin-left: 20px;
 }
 
-.voting-tiles #button-wrapper button {
+.tiles-container #tiles-wrapper button {
     height: 300px;
     width: 200px;
     margin-left: 25px;
@@ -134,11 +139,6 @@ body .container {
     grid-area: "bottom";
 }
 
-.index-div {
-    width: 80%;
-    margin: auto;
-}
-
 main {
     grid-area: main;
     margin: 0px 60px;
@@ -156,11 +156,12 @@ main p {
     padding: 15px;
 }
 
-/* main form button {
+main form button {
     float: right;
-} */
+}
 
-/* .user-box {
+/* Login and register CSS */
+.user-box {
     text-align: center;
 }
 
@@ -170,4 +171,4 @@ main p {
 
 .user-box div label {
     
-}  */
+} 
