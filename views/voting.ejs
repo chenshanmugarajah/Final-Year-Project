@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RED - Rapid Education Development</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="style.css" rel="stylesheet" type="text/css">
   </head>
   <body>
 
@@ -20,6 +21,8 @@
         </div>
         <div class="nav">
           <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/results">Results</a></li>
             <form action="/logout?_method=DELETE" method="POST">
               <button type="submit">Log Out</button>
             </form>
@@ -41,13 +44,8 @@
         </div>
       </div>
 
-      <div class="footer">
-        <a href="/results">go to results</a>
-      </div>
+      <div class="footer" id="plotdiv"></div>
 
-      <div id="test"></div>
-
-      <div id="plotdiv"></div>
     </div>
 
     <script>

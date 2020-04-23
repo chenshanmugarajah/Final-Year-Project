@@ -4,9 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Results Dashboard</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="grid-container">
+  <div class="header">
+    <div class="title">
+      <h2>RAPID</h2>
+      <h2>EDUCATION</h2>
+      <h2>DEVELOPMENT</h2>
+    </div>
+    <div class="nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/Voting">Voting</a></li>
+        <form action="/logout?_method=DELETE" method="POST">
+          <button type="submit">Log Out</button>
+        </form>
+      </ul>
+    </div>
+  </div>
   <div id="five-minute-average-votes" class="small-tile">
     <h1>Five minute average</h1>
   </div>
@@ -48,11 +65,11 @@
     const data = (JSON.parse(response.data)).data
     getUsers(data)
     updateData()
-    setInterval(() => {
-      getUsers(data)
-      updateData()
-      ts += 5;
-    }, 10000);
+    // setInterval(() => {
+    //   getUsers(data)
+    //   updateData()
+    //   ts += 5;
+    // }, 10000);
   };
 
   // WebSocket Messages
@@ -76,6 +93,7 @@
     points: 10000
   }
   let chartData = {}
+
   function getUsers (users) {
     console.log("creating users list")
     usersList[ts] = []
@@ -155,7 +173,6 @@
     // console.log(worstStudent.name)
     // console.log(totalUserVotes)
   }
-
 
 </script>
 </html>

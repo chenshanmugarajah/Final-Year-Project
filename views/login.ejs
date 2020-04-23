@@ -1,26 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>RED - Teacher performance voting website</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
 </head>
+
 <body>
-  <h1>Login</h1>
-  <% if (messages.error) { %>
-     <%= messages.error  %>
-  <% } %>  
-  <form action="/Login" method="post">
-    <div>
-      <label for="username">Username</label>
-      <input type="text" name="username" id="username" required>
+    <div class="container">
+
+        <div class="header">
+            <div class="title">
+                <h2>RAPID</h2>
+                <h2>EDUCATION</h2>
+                <h2>DEVELOPMENT</h2>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li><a href="/register">Register</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="user-box">
+        <main>
+          <h1>Login</h1>
+          <% if (messages.error) { %>
+             <%= messages.error  %>
+          <% } %>  
+        
+          <form action="/Login" method="post">
+            <div>
+              <label for="username">Username</label>
+              <input type="text" name="username" id="username" required>
+            </div>
+            <div>
+              <label for="password">Password</label>
+              <input type="text" name="password" id="password" required>
+            </div>
+            <button type="submit">Login</button>
+          </form>
+
+        </br>
+
+          <a href="/register">or Register</a>        
+        </main>
+        </div>
+        
+
     </div>
-    <div>
-      <label for="password">Password</label>
-      <input type="text" name="password" id="password" required>
-    </div>
-    <button type="submit">Login</button>
-  </form>
-  <a href="/register">go to register</a>
 </body>
 </html>

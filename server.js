@@ -18,9 +18,11 @@ const initializePassport = require('./passport-config')
 initializePassport(passport, email => getUser(email))
 
 // app set up
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(__dirname + '/public'));
 app.set('view-engine', 'ejs')
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 app.use(session({
   secret: process.env.SESSION_SECRET,

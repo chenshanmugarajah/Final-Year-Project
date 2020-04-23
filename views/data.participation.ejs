@@ -1,13 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>consent now!</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>RED - Teacher performance voting website</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
 </head>
-<body>
-  <form action="/participation-consent" method="POST">
-    <button type="submit">consent</button>
-  </form>
+
+<body style="background-color: #254a71;">
+    <div class="container">
+
+        <div class="header">
+            <div class="title">
+                <h2>RAPID</h2>
+                <h2>EDUCATION</h2>
+                <h2>DEVELOPMENT</h2>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li><a href="/">home</a></li>
+                    <li><a href="/aboutus">about us</a></li>
+                    <li><a href="/logout">logout</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="main">
+            <main>
+            <h2>PARTICIPATION</h2>
+            <p>     Using student voting and facial emotion to access lecturer performance during lectures. </br></br>
+                What is the purpose of the study? </br>
+                    The scope of the study is to investigate methods of teaching and find a way to make lectures more interactive and useful to the majority, whilst also creating options to help students that are in the minority. The study will involve researching the topic to find out existing method of improving a lecture, and better methods of teaching. This research will then be used in the development of a web-based application where student can vote on the lecturer’s performance and in real time, the lecturer will be able to see the results so that they can change their teaching method/ approach to better suit the needs of the students. </br></br>
+                Do I have to take part? </br>
+                    It is up to you whether you choose to take part or not. There will be no actions taken as a result of not taking part, since results submitted to the lecturer will be anonymised, there will be no way of telling who has voted what.
+                    If you do choose to take part, there will be a consent form which you will be asked to sign. If you do then decide to withdraw, simply stop using the web site and let the lecturer know as soon as possible. </br></br>
+                What will happen with your data? </br>
+                    The results you submit and the facial emotion recognition data will both be anonymised and sent to the lecturer. During the facial emotion recognition, your face will not be recorded, only what emotion was detected during its use. 
+                    Once you withdraw consent there is no possibility of delete this data since the data was anonymised to begin with. </br></br>
+                What will you have to do? </br>
+                    You will be asked to access a website during a lecture session and simply vote on the teacher performance throghout. The facial emotion recognition will also be run at the same time, to give accurate data to the lecturer and for this, there will be a ready button to click which will start the application. </br></br>
+            </p>
+            <form action="/participation-consent" method="POST">
+              <button type="submit">consent</button>
+            </form>
+        </main>
+    </div>
 </body>
 </html>

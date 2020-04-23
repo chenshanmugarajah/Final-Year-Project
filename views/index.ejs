@@ -1,8 +1,56 @@
-<h1>Hi</h1>
-<%= username  %>
+<!DOCTYPE html>
+<html lang="en">
 
-<a href="/voting">go to voting</a>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>RED - Teacher performance voting website</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
 
-<form action="/logout?_method=DELETE" method="POST">
-  <button type="submit">Log Out</button>
-</form>
+<body>
+    <div class="container">
+
+        <div class="header">
+            <div class="title">
+                <h2>RAPID</h2>
+                <h2>EDUCATION</h2>
+                <h2>DEVELOPMENT</h2>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li>
+                      <form action="/logout?_method=DELETE" method="POST">
+                        <button type="submit">Log Out</button>
+                      </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="index-div">
+            <main>
+                <h2> Welcome <%= username  %> </h2>
+                <h3>
+                    Read this page for more information on this project!
+                </h3>
+                <h2>What is it?</h2>
+                <h3>
+                    Rapid Education Development allows you to login and rate your teacher's performance.
+                    The idea behind RED is what by rating your teacher's performance in real-time as the lecture is happening, the teacher can adjust their methods to better suit your needs!  
+                </h3>
+                <h3>
+                    Once you log in, you will be able to access the voting page. On the voting page there will be a total of 8 tiles for you so vote on. You can click each tile as many times as you want.
+                    The results of your voting and the rest of the class will be made available to the teacher immediately. At the end of the lesson, you will be able to see all the voting results together.
+                </h3>
+
+                <a href="/voting">START VOTING</a>
+            </main>
+          </div>
+        
+
+    </div>
+</body>
+</html>
