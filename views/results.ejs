@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Results Dashboard</title>
     <link href="resultspagestyles.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </head>
   <body>
-
     <div class="container">
-
       <div class="header">
         <div class="title">
           <h2>RAPID</h2>
@@ -29,20 +28,11 @@
         </div>
       </div>
 
-      <div id="five-minute-average-votes" class="small-tile">
-        <h1>Five minute average</h1>
-      </div>
+      <div id="main-chart" class="big-tile"></div>
+
       <div id="total-votes" class="small-tile">
         <h1>Total Votes</h1>
       </div>
-      <div id="lesson-average-votes" class="small-tile">
-        <h1>Lesson average Votes</h1>
-      </div>
-
-      <div id="main-chart" class="big-tile">
-        <h1>Main chart</h1>
-      </div>
-
       <div id="most-active" class="small-tile">
         <h1>Most active student</h1>
       </div>
@@ -52,9 +42,10 @@
       <div id="class-emotion" class="small-tile">
         <h1>Class emotion</h1>
       </div>
-      
+
     </div>
   </body>
+
   <script>
     const connection = new WebSocket(
       "wss://a31vmdscn7.execute-api.us-east-1.amazonaws.com/dev"
@@ -141,7 +132,7 @@
         }
       }
 
-      console.log(chartData);
+      plotData(chartData);
     }
 
     function totVotes(user) {
@@ -180,6 +171,44 @@
         "Least active student: " + worstStudent.name;
       document.getElementById("total-votes").innerHTML =
         "Total votes: " + totalUserVotes[ts];
+    }
+
+    function plotData(data) {
+      const plotDiv = document.getElementById("main-chart");
+      let myData = data;
+      delete myData.password;
+      delete myData.username;
+
+      let xData = [];
+      for (let propety in myData) {
+        if (propety == "explane") {
+          propety = "explain";
+        }
+        if (propety == "breaktime") {
+          propety = "break";
+        }
+        if (propety == "goback") {
+          propety = "go back";
+        }
+        propety = propety.toUpperCase();
+
+        xData.push(propety);
+      }
+
+      let yData = [];
+      for (let propety in myData) {
+        yData.push(myData[propety]);
+      }
+
+      let data1 = [
+        {
+          x: xData,
+          y: yData,
+          type: "bar",
+        },
+      ];
+
+      Plotly.newPlot(plotDiv, data1);
     }
   </script>
 </html>
