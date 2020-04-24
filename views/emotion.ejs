@@ -1,12 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Emotion</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+  <script src="aws-cognito-sdk.min.js"></script>
+  <script src="amazon-cognito-identity.min.js"></script>
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.16.0.min.js"></script>
+  <!-- <link rel="stylesheet" type="text/css" href="styles.css" /> -->
 </head>
-<body class="grid-container">
-  
+
+<body class="container">
+  <!-- 
+    <div class="header">
+      <div class="title">
+        <h2>RAPID</h2>
+        <h2>EDUCATION</h2>
+        <h2>DEVELOPMENT</h2>
+      </div>
+      <div class="nav">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li>
+            <form action="/logout?_method=DELETE" method="POST">
+              <button type="submit">Log Out</button>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </div> -->
+
+  <div class="main">
+    <canvas id="canvas" style="border: 1px solid black; display: none;"></canvas>
+
+    <video id="video"></video> </br>
+    <button onclick="saveImage()">Snap</button>
+
+    <div id="image" style="border: 1px solid red;"></div>
+
+    <div id="opResult"></div>
+  </div>
+
+  <script type="text/javascript">
+
+    //Divs from HTML
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+    const imageDiv = document.getElementById("image");
+
+    //Navigator generalisations
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.oGetUserMedia || navigator.msGetUserMedia;
+    if (navigator.getUserMedia) {
+      navigator.getUserMedia({ video: true }, streamWebCam, throwError);
+    }
+
+    //Local variables
+    var localStream;
+    let image64;
+
+    //Stream webcam
+    function streamWebCam(stream) {
+      localStream = stream;
+      video.srcObject = stream;
+      video.play();
+    }
+
+    //Error
+    function throwError(e) {
+      console.log(e)
+    }
+
+    //Get base64 image
+    function saveImage() {
+      canvas.width = video.clientWidth;
+      canvas.height = video.clientHeight;
+      context.drawImage(video, 0, 1)
+      image64 = canvas.toDataURL();
+      let image = document.createElement("img");
+      image.src = image64
+      imageDiv.appendChild(image);
+      ProcessImage(image64);
+    }
+
+    function DetectFaces(imageData) {
+      AWS.config.region = "us-east-1";
+      AWS.config.update({
+        region: "us-east-1",
+        accessKeyId: "ASIA2BP2RRWIJX6Q57OO",
+        secretAccessKey: "grXM0xKFsKtx/TOmt77XQ19Tq9zdYsQCfk8Cu5i/",
+        sessionToken: "FwoGZXIvYXdzEGAaDF3lCxkwwbM2dIiQWCLEAbNLXxAu29Csu96M7GzqiYHJQuxbUXZyAhrm4bA5hYI67SC1DeYkB9ihuQcpz5niETvpCnOb+2nZcTZ73mkKNrsYq9YLcKwsMxAT56SPAKeiWxNbGHQUU4WN2Y3aEt6ieqDgP7TXOUdEE4kVfKwsjJSlaW2ZaHlfXHWg3kGpxoTMtaZWfDyllRUHFkZUDWi7pOqUviNJCo07UkiE3IIzPZefxBLfxCKys4M7f3Bh8f4GMF3B5A81BhOL0fm/z9ykwRLKgWko4+OL9QUyLSTVuVeQLyf7xLs4PciHJIBhTx75E7sIFWDv11zZnSjtQ4DERXbuzry4Hp7qug=="
+      })
+
+      var rekognition = new AWS.Rekognition();
+      var params = {
+        Image: {
+          Bytes: imageData
+        },
+        Attributes: [
+          'ALL',
+        ]
+      };
+      rekognition.detectFaces(params, function (err, data) {
+        if (err) console.log(err, err.stack); // an error occurred
+        else {
+          console.log(data)
+          // var table = "<table><tr><th>Low</th><th>High</th></tr>";
+          // // show each face and build out estimated age table
+          // for (var i = 0; i < data.FaceDetails.length; i++) {
+          //   table += '<tr><td>' + data.FaceDetails[i].AgeRange.Low +
+          //     '</td><td>' + data.FaceDetails[i].AgeRange.High + '</td></tr>';
+          // }
+          // table += "</table>";
+          // document.getElementById("opResult").innerHTML += table;
+        }
+      });
+    }
+
+    //Loads selected image and unencodes image bytes for Rekognition DetectFaces API
+    function ProcessImage(image64) {
+
+      var image = null;
+      var jpg = true;
+
+      try {
+        image = atob(image64.split("data:image/jpeg;base64,")[1]);
+      } catch (e) {
+        jpg = false;
+      }
+      if (jpg == false) {
+        try {
+          image = atob(image64.split("data:image/png;base64,")[1]);
+        } catch (e) {
+          alert("Not an image file Rekognition can process");
+          return;
+        }
+      }
+
+      var length = image.length;
+      imageBytes = new ArrayBuffer(length);
+      var ua = new Uint8Array(imageBytes);
+      for (var i = 0; i < length; i++) {
+        ua[i] = image.charCodeAt(i);
+      }
+
+      DetectFaces(imageBytes);
+    }
+
+    function AnonLog() {
+      AWS.config.region = 'us-east-1'; // Region
+      AWS.config.update({
+        region: "us-east-1",
+        accessKeyId: "ASIA2BP2RRWIJX6Q57OO",
+        secretAccessKey: "grXM0xKFsKtx/TOmt77XQ19Tq9zdYsQCfk8Cu5i/",
+        sessionToken: "FwoGZXIvYXdzEGAaDF3lCxkwwbM2dIiQWCLEAbNLXxAu29Csu96M7GzqiYHJQuxbUXZyAhrm4bA5hYI67SC1DeYkB9ihuQcpz5niETvpCnOb+2nZcTZ73mkKNrsYq9YLcKwsMxAT56SPAKeiWxNbGHQUU4WN2Y3aEt6ieqDgP7TXOUdEE4kVfKwsjJSlaW2ZaHlfXHWg3kGpxoTMtaZWfDyllRUHFkZUDWi7pOqUviNJCo07UkiE3IIzPZefxBLfxCKys4M7f3Bh8f4GMF3B5A81BhOL0fm/z9ykwRLKgWko4+OL9QUyLSTVuVeQLyf7xLs4PciHJIBhTx75E7sIFWDv11zZnSjtQ4DERXbuzry4Hp7qug=="
+      })
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: 'us-east-1:04f30d3b-eb7d-4506-a480-c001213f5a98',
+      });
+      // Make the call to obtain credentials
+      AWS.config.credentials.get(function () {
+        // Credentials will be available when this function is called.
+        // var accessKeyId = AWS.config.credentials.accessKeyId;
+        // var secretAccessKey = AWS.config.credentials.secretAccessKey;
+        // var sessionToken = AWS.config.credentials.sessionToken;
+
+        // Credentials will be available when this function is called.
+        var accessKeyId = "ASIA2BP2RRWIJX6Q57OO";
+        var secretAccessKey = "grXM0xKFsKtx/TOmt77XQ19Tq9zdYsQCfk8Cu5i/";
+        var sessionToken = "FwoGZXIvYXdzEGAaDF3lCxkwwbM2dIiQWCLEAbNLXxAu29Csu96M7GzqiYHJQuxbUXZyAhrm4bA5hYI67SC1DeYkB9ihuQcpz5niETvpCnOb+2nZcTZ73mkKNrsYq9YLcKwsMxAT56SPAKeiWxNbGHQUU4WN2Y3aEt6ieqDgP7TXOUdEE4kVfKwsjJSlaW2ZaHlfXHWg3kGpxoTMtaZWfDyllRUHFkZUDWi7pOqUviNJCo07UkiE3IIzPZefxBLfxCKys4M7f3Bh8f4GMF3B5A81BhOL0fm/z9ykwRLKgWko4+OL9QUyLSTVuVeQLyf7xLs4PciHJIBhTx75E7sIFWDv11zZnSjtQ4DERXbuzry4Hp7qug==";
+      });
+
+    }
+
+    window.onclose = () => {
+      localStream.stop()
+    }
+
+  </script>
+
 </body>
+
 </html>
