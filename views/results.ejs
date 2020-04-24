@@ -7,9 +7,10 @@
     <link href="resultspagestyles.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </head>
-  <body>
-    <div class="container">
-      <div class="header">
+
+  <body class="grid-container">
+
+      <div class="red-header">
         <div class="title">
           <h2>RAPID</h2>
           <h2>EDUCATION</h2>
@@ -28,22 +29,26 @@
         </div>
       </div>
 
-      <div id="main-chart" class="big-tile"></div>
+      <div class="all-data">
+        <div id="main-chart" class="big-tile"></div>
 
       <div id="total-votes" class="small-tile">
         <h1>Total Votes</h1>
       </div>
+
       <div id="most-active" class="small-tile">
         <h1>Most active student</h1>
       </div>
+
       <div id="least-active" class="small-tile">
         <h1>Least active student</h1>
       </div>
+
       <div id="class-emotion" class="small-tile">
         <h1>Class emotion</h1>
       </div>
+      </div>
 
-    </div>
   </body>
 
   <script>

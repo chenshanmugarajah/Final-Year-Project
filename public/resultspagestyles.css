@@ -4,39 +4,33 @@ body {
   padding: 0;
 }
 
-.container {
-  margin: 0;
-  padding: 0;
+.grid-container {
   display: grid;
-  grid-template-rows: 140px 1fr 1fr 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 140px auto;
+  grid-template-columns: 1fr;
   grid-template-areas: 
-    "header",
-    "myChart s1",
-    "myChart s2",
-    "myChart s3",
-    "myChart s4";
+    "hd"
+    "main";
 }
 
-.header {
-  grid-area: "header header";
+.red-header {
+  grid-area: hd;
   color: white;
   background-color: #254a71;
   margin: 0;
   padding: 25px 0 0 35px;
-  width: 100%;
 }
 
-.header .title {
+.red-header .title {
   float: left;
 }
 
-.header .title h2 {
+.red-header .title h2 {
   margin: 0;
   padding: 0;
 }
 
-.header .nav {
+.red-header .nav {
   float: right;
 }
 
@@ -58,35 +52,45 @@ body {
 }
 
 .nav ul li button {
-  color: white;
-  background-color: #254a71;
+  background-color: white;
+  color: #254a71;
   border: none;
   font-weight: bold;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
 
+
+.all-data {
+  grid-area: main;
+  background-color: aqua;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-areas: 
+    "mc s1"
+    "mc s2"
+    "mc s3"
+    "mc s4";
+}
+
 #main-chart {
-  grid-area: "myChart";
-  background-color: pink;
+  grid-area: mc;
 }
 
 #total-votes {
-  grid-area: "s1";
-  background-color: red;
+  height: 200px;
+  grid-area: s1;
 }
 
 #most-active {
-  grid-area: "s2";
-  background-color: blueviolet;
+  grid-area: s2;
 }
 
 #least-active {
-  grid-area: "s3";
-  background-color: aqua;
+  grid-area: s3;
 }
 
 #class-emotion {
-  grid-area: "s4";
-  background-color: #254a71;
+  grid-area: s4
 }

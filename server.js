@@ -184,6 +184,14 @@ app.post('/participation-consent', (req, res) => {
 app.get('/results', checkAuthenticated, (req, res) => {
   res.render('results.ejs')
 })
+
+app.get('/emotion', (req, res) => {
+  res.render('emotion.ejs')
+})
+
+app.post('/emotion', (req, res) => {
+  console.log('posting accepted from server.js')
+})
 // server
 app.listen(3000, () => {
   console.log('Server started: http://localhost:3000')
