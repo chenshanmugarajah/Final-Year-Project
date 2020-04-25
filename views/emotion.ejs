@@ -8,28 +8,28 @@
   <script src="aws-cognito-sdk.min.js"></script>
   <script src="amazon-cognito-identity.min.js"></script>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.16.0.min.js"></script>
-  <!-- <link rel="stylesheet" type="text/css" href="styles.css" /> -->
+  <link rel="stylesheet" type="text/css" href="emotionStyles.css" />
 </head>
 
 <body class="container">
-  <!-- 
-    <div class="header">
-      <div class="title">
-        <h2>RAPID</h2>
-        <h2>EDUCATION</h2>
-        <h2>DEVELOPMENT</h2>
-      </div>
-      <div class="nav">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li>
-            <form action="/logout?_method=DELETE" method="POST">
-              <button type="submit">Log Out</button>
-            </form>
-          </li>
-        </ul>
-      </div>
-    </div> -->
+
+  <div class="header">
+    <div class="title">
+      <h2>RAPID</h2>
+      <h2>EDUCATION</h2>
+      <h2>DEVELOPMENT</h2>
+    </div>
+    <div class="nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li>
+          <form action="/logout?_method=DELETE" method="POST">
+            <button type="submit">Log Out</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
 
   <div class="main">
     <canvas id="canvas" style="border: 1px solid black; display: none;"></canvas>
@@ -85,13 +85,6 @@
     }
 
     function DetectFaces(imageData) {
-      AWS.config.region = "us-east-1";
-      AWS.config.update({
-        region: "us-east-1",
-        accessKeyId: "ASIA2BP2RRWIJX6Q57OO",
-        secretAccessKey: "grXM0xKFsKtx/TOmt77XQ19Tq9zdYsQCfk8Cu5i/",
-        sessionToken: "FwoGZXIvYXdzEGAaDF3lCxkwwbM2dIiQWCLEAbNLXxAu29Csu96M7GzqiYHJQuxbUXZyAhrm4bA5hYI67SC1DeYkB9ihuQcpz5niETvpCnOb+2nZcTZ73mkKNrsYq9YLcKwsMxAT56SPAKeiWxNbGHQUU4WN2Y3aEt6ieqDgP7TXOUdEE4kVfKwsjJSlaW2ZaHlfXHWg3kGpxoTMtaZWfDyllRUHFkZUDWi7pOqUviNJCo07UkiE3IIzPZefxBLfxCKys4M7f3Bh8f4GMF3B5A81BhOL0fm/z9ykwRLKgWko4+OL9QUyLSTVuVeQLyf7xLs4PciHJIBhTx75E7sIFWDv11zZnSjtQ4DERXbuzry4Hp7qug=="
-      })
 
       var rekognition = new AWS.Rekognition();
       var params = {
@@ -105,22 +98,37 @@
       rekognition.detectFaces(params, function (err, data) {
         if (err) console.log(err, err.stack); // an error occurred
         else {
-          console.log(data)
-          // var table = "<table><tr><th>Low</th><th>High</th></tr>";
-          // // show each face and build out estimated age table
-          // for (var i = 0; i < data.FaceDetails.length; i++) {
-          //   table += '<tr><td>' + data.FaceDetails[i].AgeRange.Low +
-          //     '</td><td>' + data.FaceDetails[i].AgeRange.High + '</td></tr>';
-          // }
-          // table += "</table>";
-          // document.getElementById("opResult").innerHTML += table;
+          var table = "<table><tr><th>Emotion</th><th>Confidence</th></tr>";
+
+          for (var i = 0; i < data.FaceDetails.length; i++) {
+            let sortedEmotions = data.FaceDetails[0].Emotions.sort(function (a, b) {
+              if (a.Confidence > b.Confidence) {
+                return -1;
+              } else if (b.Confidence > a.Confidence) {
+                return +1;
+              } else {
+                return 0;
+              }
+            });
+            let emotion = sortedEmotions[0].Type;
+            let confidence = sortedEmotions[0].Confidence;
+            console.log(data.FaceDetails[0].Emotions);
+
+            table += '<tr><td>' + emotion +
+              '</td><td>' + confidence + '</td></tr>';
+          }
+
+          table += "</table>";
+          document.getElementById("opResult").innerHTML += table;
+
         }
       });
     }
 
-    //Loads selected image and unencodes image bytes for Rekognition DetectFaces API
     function ProcessImage(image64) {
+      updateCred();
 
+      console.log('Process image')
       var image = null;
       var jpg = true;
 
@@ -149,29 +157,27 @@
     }
 
     function AnonLog() {
-      AWS.config.region = 'us-east-1'; // Region
-      AWS.config.update({
-        region: "us-east-1",
-        accessKeyId: "ASIA2BP2RRWIJX6Q57OO",
-        secretAccessKey: "grXM0xKFsKtx/TOmt77XQ19Tq9zdYsQCfk8Cu5i/",
-        sessionToken: "FwoGZXIvYXdzEGAaDF3lCxkwwbM2dIiQWCLEAbNLXxAu29Csu96M7GzqiYHJQuxbUXZyAhrm4bA5hYI67SC1DeYkB9ihuQcpz5niETvpCnOb+2nZcTZ73mkKNrsYq9YLcKwsMxAT56SPAKeiWxNbGHQUU4WN2Y3aEt6ieqDgP7TXOUdEE4kVfKwsjJSlaW2ZaHlfXHWg3kGpxoTMtaZWfDyllRUHFkZUDWi7pOqUviNJCo07UkiE3IIzPZefxBLfxCKys4M7f3Bh8f4GMF3B5A81BhOL0fm/z9ykwRLKgWko4+OL9QUyLSTVuVeQLyf7xLs4PciHJIBhTx75E7sIFWDv11zZnSjtQ4DERXbuzry4Hp7qug=="
-      })
+
       AWS.config.credentials = new AWS.CognitoIdentityCredentials({
         IdentityPoolId: 'us-east-1:04f30d3b-eb7d-4506-a480-c001213f5a98',
       });
-      // Make the call to obtain credentials
+
       AWS.config.credentials.get(function () {
         // Credentials will be available when this function is called.
         // var accessKeyId = AWS.config.credentials.accessKeyId;
         // var secretAccessKey = AWS.config.credentials.secretAccessKey;
         // var sessionToken = AWS.config.credentials.sessionToken;
-
-        // Credentials will be available when this function is called.
-        var accessKeyId = "ASIA2BP2RRWIJX6Q57OO";
-        var secretAccessKey = "grXM0xKFsKtx/TOmt77XQ19Tq9zdYsQCfk8Cu5i/";
-        var sessionToken = "FwoGZXIvYXdzEGAaDF3lCxkwwbM2dIiQWCLEAbNLXxAu29Csu96M7GzqiYHJQuxbUXZyAhrm4bA5hYI67SC1DeYkB9ihuQcpz5niETvpCnOb+2nZcTZ73mkKNrsYq9YLcKwsMxAT56SPAKeiWxNbGHQUU4WN2Y3aEt6ieqDgP7TXOUdEE4kVfKwsjJSlaW2ZaHlfXHWg3kGpxoTMtaZWfDyllRUHFkZUDWi7pOqUviNJCo07UkiE3IIzPZefxBLfxCKys4M7f3Bh8f4GMF3B5A81BhOL0fm/z9ykwRLKgWko4+OL9QUyLSTVuVeQLyf7xLs4PciHJIBhTx75E7sIFWDv11zZnSjtQ4DERXbuzry4Hp7qug==";
       });
 
+    }
+
+    function updateCred() {
+      AWS.config.update({
+        region: "us-east-1",
+        accessKeyId: "ASIA2BP2RRWINWVT7BV7",
+        secretAccessKey: "bfjfJWjpwbbnBG35/qOd5Xt8ndaJFj6uu2E57lTD",
+        sessionToken: "FwoGZXIvYXdzEH0aDPk0DSGALGc/v16YMCLEAcYL0iCSPFkkbe1tZyuMRrx+IG88UPLXAmldTV8bx5P3OtqTEWlr97AsSjdzIXrCRcDMLoG7qJ+CR+kxL2eAduHcV5wI4IY8PxBNl8Cf9bQEldwdI9+qdJ4t78eWT+XSDI20yevTVQ3IAE5vsHADoGd4P5ceV3/JUcvqn4OnQwbKV/+fuBN0WZNDeaWP8D/gf2dOOrRtJp25gEM+1duVpnjf+wPBaMo6zHEgb/ALd9QYwdXiJ3l9wCWRUazMtbPSM/VGG3AogJeS9QUyLXcc/M4SumDce7CIe9vLHq/jNlrdswDnnUOKeB+MIM20b1aN2JYjfkavAWhjfA=="
+      })
     }
 
     window.onclose = () => {
