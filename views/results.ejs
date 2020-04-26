@@ -67,8 +67,9 @@
     connection.onmessage = (response) => {
       console.log("message recieved");
       const data = JSON.parse(response.data).data;
-      getUsers(data);
-      updateData();
+      console.log(data)
+      // getUsers(data);
+      // updateData();
       // setInterval(() => {
       //   getUsers(data)
       //   updateData()

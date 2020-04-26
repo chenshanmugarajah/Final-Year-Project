@@ -89,7 +89,8 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
           faster: 0,
           breaktime: 0,
           goback: 0,
-          question: 0
+          question: 0,
+          emotion: "neutral"
         }
       };
     
@@ -185,8 +186,9 @@ app.get('/results', checkAuthenticated, (req, res) => {
   res.render('results.ejs')
 })
 
-app.get('/emotion', (req, res) => {
-  res.render('emotion.ejs')
+app.get('/emotion', checkAuthenticated, async (req, res) => {
+  const user = (await req.user).Items[0]
+  res.render('emotion.ejs', {username: user.username})
 })
 
 app.post('/emotion', (req, res) => {
