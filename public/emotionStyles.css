@@ -61,5 +61,34 @@ body {
 }
 
 .main {
-  grid-area: main
+  grid-area: main;
+  text-align: center;
+  margin: 10px;
+}
+
+.main video {
+  border: black 1px solid;
+  border-radius: 7px;
+  height: 400px;
+}
+
+.main button {
+  margin: 10px;
+  height: 40px;
+  width: 100px;
+  background-color: #254a71;
+  color: white;
+  border: none;
+  font-weight: bolder;
+  border-radius: 7px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+#image img {
+  height: 200px;
+}
+
+#opResult {
+  text-align: center;
 }

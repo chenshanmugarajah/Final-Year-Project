@@ -23,7 +23,9 @@
         <div class="nav">
           <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/results">Results</a></li>
+            <li><a href="/Voting">Voting</a></li>
+            <li><a href="/Emotion">Emotion</a></li>
+            <li><a href="/Results">Results</a></li>
             <li>
               <form action="/logout?_method=DELETE" method="POST">
                 <button type="submit">Log Out</button>
@@ -127,7 +129,13 @@
           type: 'bar'
         }];
 
-        Plotly.newPlot(plotDiv, data1);
+        var layout = {
+          title: "Your Voting Results",
+          showlegend: false,
+          font: {size: 18}
+        }
+
+        Plotly.newPlot(plotDiv, data1, layout, {displayModeBar: false, displayLogo: false, responsive: true});
       }
 
       function storeVotes() {

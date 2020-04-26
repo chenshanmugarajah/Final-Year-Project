@@ -62,8 +62,9 @@ body {
 
 
 .all-data {
+  width: 90%;
+  margin: auto;
   grid-area: main;
-  background-color: aqua;
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
@@ -79,7 +80,6 @@ body {
 }
 
 #total-votes {
-  height: 200px;
   grid-area: s1;
 }
 
@@ -93,4 +93,15 @@ body {
 
 #class-emotion {
   grid-area: s4
+}
+
+.small-tile {
+  text-align: center;
+  text-transform: capitalize;
+  background-color: #254a71;
+  color: white;
+  border: 1px black solid;
+  border-radius: 7px;
+  height: 125px;
+  margin: 30px 0;
 }

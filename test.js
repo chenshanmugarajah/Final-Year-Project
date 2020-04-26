@@ -1,69 +1,41 @@
-let usersList = {}
-let totalUserVotes = {}
-let ts = 0;
-let bestStudent = {
-  name: "",
-  points: 0
-}
-let worstStudent = {
-  name: "",
-  points: 10000
-}
+let data = [{ "explane": 0, "question": 0, "password": "$2a$10$BKXlu//I6Bbzmb/c4fcQDeZeQkaSIBOs.UgvkEce.PFk43RZBOzpe", "goback": 0, "emotion": "HAPPY", "louder": 0, "slower": 0, "username": "chen", "faster": 0, "clearer": 0, "breaktime": 0 }, { "explane": 0, "question": 0, "password": "$2a$10$T1peRdc5OAQZdf05fxmUq.UGheDCej1bNrIcl2RwC8Szbp.5KY3i6", "goback": 0, "emotion": "CALM", "louder": 0, "slower": 0, "username": "test", "faster": 0, "clearer": 0, "breaktime": 0 }, { "explane": 0, "question": 0, "password": "$2a$10$T1peRdc5OAQZdf05fxmUq.UGheDCej1bNrIcl2RwC8Szbp.5KY3i6", "goback": 0, "emotion": "CALM", "louder": 0, "slower": 0, "username": "test", "faster": 0, "clearer": 0, "breaktime": 0 }, { "explane": 0, "question": 0, "password": "$2a$10$T1peRdc5OAQZdf05fxmUq.UGheDCej1bNrIcl2RwC8Szbp.5KY3i6", "goback": 0, "emotion": "MEH", "louder": 0, "slower": 0, "username": "test", "faster": 0, "clearer": 0, "breaktime": 0 }, { "explane": 0, "question": 0, "password": "$2a$10$T1peRdc5OAQZdf05fxmUq.UGheDCej1bNrIcl2RwC8Szbp.5KY3i6", "goback": 0, "emotion": "CALM", "louder": 0, "slower": 0, "username": "test", "faster": 0, "clearer": 0, "breaktime": 0 }, { "explane": 0, "question": 0, "password": "$2a$10$T1peRdc5OAQZdf05fxmUq.UGheDCej1bNrIcl2RwC8Szbp.5KY3i6", "goback": 0, "emotion": "CALM", "louder": 0, "slower": 0, "username": "test", "faster": 0, "clearer": 0, "breaktime": 0 }]
 
-function getUsers (users) {
-  usersList[ts] = []
-  totalUserVotes[ts] = 0
-  for (let user in users) {
-    usersList[ts][user] = {
-      votes: users[user],
-      mostVoted: mostVoted(users[user]),
-      totalVotes: totVotes(users[user])
-    }
-  }
-  for(let user in usersList[ts]) {
-    if(bestStudent.points < usersList[ts][user].totalVotes) {
-      bestStudent.name = user,
-      bestStudent.points = usersList[ts][user].totalVotes
-    }
-    if(worstStudent.points > usersList[ts][user].totalVotes) {
-      worstStudent.name = user,
-      worstStudent.points = usersList[ts][user].totalVotes
-    } 
-  }
-  // ts += 5
-}
+// let users = [];
 
-function totVotes (user) {
-  let total = 0;
-  for(let data in user) {
-    total += user[data]
-  }
-  totalUserVotes[ts] += total
-  return total
-}
+// let classroom = {
+//   breaktime: 0,
+//   louder: 0,
+//   question: 0,
+//   explane: 0,
+//   goback: 0,
+//   faster: 0,
+//   slower: 0,
+//   clearer: 0,
+//   emotion: getClassEmotion()
+// };
 
-function mostVoted (user) {
-  let dataArr = []
-  for(let data in user) {
-    dataArr.push({
-      name: data,
-      value: user[data]
-    })
-  }
-  dataArr.sort(function (a, b) {
-    if (a.value > b.value) {
-      return -1
-    } else if (b.value > a.value) {
-      return +1
+function getClassEmotion(data) {
+  var classEmotion = {}
+
+  for (let student in data) {
+    let studentEmotion = data[student].emotion;
+    if (!classEmotion[studentEmotion]) {
+      classEmotion[studentEmotion] = 1
     } else {
-      return 0
+      classEmotion[studentEmotion] += 1
     }
-  })
-  return dataArr[0].name
+  }
+  var sortable = [];
+  for (var emotion in classEmotion) {
+    sortable.push([emotion, classEmotion[emotion]]);
+  }
+
+  sortable.sort(function (a, b) {
+    return a[1] - b[1];
+  });
+
+  let test = sortable.pop()[0]
+  console.log(test)
 }
 
-getUsers(users)
-
-document.getElementById("best-student-div").innerHTML += bestStudent.name;
-document.getElementById("worst-student-div").innerHTML += worstStudent.name;
-document.getElementById("total-votes-div").innerHTML += totalUserVotes[ts];
+getClassEmotion(data);

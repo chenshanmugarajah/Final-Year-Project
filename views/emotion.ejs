@@ -22,6 +22,9 @@
     <div class="nav">
       <ul>
         <li><a href="/">Home</a></li>
+        <li><a href="/Voting">Voting</a></li>
+        <li><a href="/Emotion">Emotion</a></li>
+        <li><a href="/Results">Results</a></li>
         <li>
           <form action="/logout?_method=DELETE" method="POST">
             <button type="submit">Log Out</button>
@@ -36,11 +39,12 @@
     <div id="username" style="display:none"><%= username %></div>
 
     <video id="video"></video> </br>
+    <h3>Click snap to let RED detect and store your emotion</h3>
     <button onclick="saveImage()">Snap</button>
 
-    <div id="image" style="border: 1px solid red;"></div>
+    <div id="image"></div>
+    <!-- <figcaption id="opResult"></figcaption> -->
 
-    <div id="opResult"></div>
   </div>
 
   <script type="text/javascript">
@@ -103,30 +107,27 @@
       rekognition.detectFaces(params, function (err, data) {
         if (err) console.log(err, err.stack); // an error occurred
         else {
-          var table = "<table><tr><th>Emotion</th><th>Confidence</th></tr>";
           let sortedEmotions;
           let emotion;
           let confidence;
-          for (var i = 0; i < data.FaceDetails.length; i++) {
-            sortedEmotions = data.FaceDetails[i].Emotions.sort(function (a, b) {
-              if (a.Confidence > b.Confidence) {
-                return -1;
-              } else if (b.Confidence > a.Confidence) {
-                return +1;
-              } else {
-                return 0;
-              }
-            });
-            emotion = sortedEmotions[0].Type;
-            confidence = sortedEmotions[0].Confidence;
-            console.log(data.FaceDetails[0].Emotions);
 
-            table += '<tr><td>' + emotion +
-              '</td><td>' + confidence + '</td></tr>';
-          }
+          sortedEmotions = data.FaceDetails[0].Emotions.sort(function (a, b) {
+            if (a.Confidence > b.Confidence) {
+              return -1;
+            } else if (b.Confidence > a.Confidence) {
+              return +1;
+            } else {
+              return 0;
+            }
+          });
+          emotion = sortedEmotions[0].Type;
+          confidence = sortedEmotions[0].Confidence;
 
-          table += "</table>";
-          document.getElementById("opResult").innerHTML += table;
+          let caption = document.createElement("figcaption");
+          caption.innerHTML = "Detected: " + emotion;
+          imageDiv.appendChild(caption);
+
+          // document.getElementById("opResult").innerHTML += "Detected: " + emotion;
 
           let msg = {
             username: username,
@@ -195,9 +196,9 @@
     function updateCred() {
       AWS.config.update({
         region: "us-east-1",
-        accessKeyId: "ASIA2BP2RRWICIIC6H4C",
-        secretAccessKey: "EEh8IrZwXsiBt9AQPaKUiQk/SHBmLJFkQN3zt76q",
-        sessionToken: "FwoGZXIvYXdzEIr//////////wEaDLbSYrKXiQhZpwewLyLEASvl1+25m9Z6D8Kd/b7/MYtwMRvWjmRPj6+1SG/KAlVJhrjBgDgFrcvRYzi682BHDtBZ9jalY5hSc8PkOwpEEdSx0w0IgKPjf8kFXHm8Tx3/P1OW8CrknllkyYio8JGgpgvB5IaWoBVpwDhK9I+DyiNTh3Y5pN+kftG08AV4Al30Yxp23C2a/NeI6jpPd8JazBqS9P+BO+jSItuvZDWVYObPvsdsEbKahJYIQhJiDhktI/2/R+4jdYzwYditAgWUDTKXCDoo142V9QUyLQQ5xfD3h9Imi9OdUNfMpW2/NAiBozhgQ2t0Tz2vTgsV1dI93Q1P444Dil1QTQ=="
+        accessKeyId: "ASIA2BP2RRWIEOYECNUZ",
+        secretAccessKey: "8NRsc1426IO/T1YMp6ipzGhzum+UmLDvB3fLlgcG",
+        sessionToken: "FwoGZXIvYXdzEJf//////////wEaDEBxe07z2nkh5+pIPSLEAYUGGD4jm8L43lA+FaYSrBvrREACTN8JoVqbrl6MMpHOxl7oaNnmwyEN3TU85c3pyYkL6KQ3VpQQjkHm1fDMxJTHUECs/uSbN1alMzVTJvnnYnby/u3Jn08vIeAbkG+cvrVmE5cH4Jug/4vS04SySw+Sqk8Un2K/Iz0bXKrpW7fF3XqAgw10MVQgL17IYnHLo0nPEI0yDQz6Au3FTe29x5w0qBKTnbzFfCw8LCoBt/0hotGxGziIU0NS9mGe01WgjysLTQconPuX9QUyLVAheAx0Kk5zp5tmPKvJclVmJD3O6peCLPR1Ryi/Wvv/yT7L20mvtm0Z46VK8g=="
       })
     }
 
