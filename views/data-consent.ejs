@@ -27,10 +27,15 @@
 
         <div class="main">
             <main>
-            <h2>PARTICIPATION</h2>
-            <p>
-              Participation is a must!
-            </p>
+                <h2>DATA</h2>
+                <p>     Using student voting and facial emotion to access lecturer performance during lectures. </br></br>
+                    What data is being collected? </br>
+                        The project collects your student id and password in the registration process, however your student id is never linked with your name by the project. Your password is also encrypted and not stored into a plain text format anywhere. In addition to this, as you vote, you choice is stored in a database along with your username and password. Furthermore, your emotion is also stored in the database. </br></br>
+                    How does the facial emotion recognition work? </br>
+                        For the emotion page to work, you will first need to give the website web cam access. After clicking allow, you will have a chance to position yourself within the frame. Once you have positioned yourself, you click on the snap button; clicking on this button takes a snapshot of your face which is then analysed using a call to our service. Your face is only ever stored in the browser. You face image and web cam access is automatically removed when you leave the page. </br></br>
+                    How is your data protected? </br>
+                        When you register with your username and password, your username is never associated with your name. Your password is encrypted before it is stored which means even if someone was able to gain access, they will not be able to connect your user id to you and furthermore will not be able to log in as you. All data is hosted in a protected Amazon Web Service DynamoDB database. In regards to your emotion data, you face is never stored anywhere, only the outcome of the emotion analysis. </br>
+                </p>
             <form action="/data-consent" method="POST">
               <button type="submit">consent</button>
             </form>

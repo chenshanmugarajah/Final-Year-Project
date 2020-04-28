@@ -57,51 +57,51 @@
 
     <script>
 
+      //Local variables
       let votes = {};
       const wrapper = document.getElementById("tiles-wrapper");
       const username = document.getElementById('username').textContent;
+
+      //WebSocket setup
       const connection = new WebSocket("wss://a31vmdscn7.execute-api.us-east-1.amazonaws.com/dev");
-
-      connection.onopen = (event) => {
-        console.log("connected!");
-        getUserData();
-      };
-
-      connection.onerror = (error) => {
-        console.log("ERROR");
-        console.log(error);
-      };
-
+      connection.onopen = (event) => { getUserData(); };
+      connection.onerror = (error) => { console.log(error); };
       connection.onmessage = (response) => {
+        //Handle response
         let thisRes = JSON.parse(response.data);
-
         if(thisRes.name == "getUserData") {
           votes = thisRes.data;
           plotData(votes)
         }
-
-
       };
 
+      //Event listener added to the tiles
       wrapper.addEventListener("click", (event) => {
+        //Check if a button is clicked
         const isButton = event.target.nodeName === "BUTTON";
         if (!isButton) {
           return;
         } else {
+          //Register the click
           const choice = event.target.id;
           votes[choice] += 1;
           event.preventDefault();
         }
+        //Plot the new vote
         plotData(votes)
+        //Store the new vote
         storeVotes()
       });
 
+      //Plot the chart
       function plotData(data) {
+        //Get the chart div
         const plotDiv = document.getElementById('plotdiv');
         let myData = data
         delete myData.password
         delete myData.username
 
+        //Adjust the naming
         let xData = []
         for (let propety in myData) {
           if(propety == "explane"){
@@ -123,55 +123,65 @@
           yData.push(myData[propety])
         }
 
+        //Plotly params
         let data1 = [{
           x: xData,
           y: yData,
           type: 'bar'
         }];
 
+        //Plotly settings
         var layout = {
           title: "Your Voting Results",
           showlegend: false,
           font: {size: 18}
         }
 
+        //Plotting data
         Plotly.newPlot(plotDiv, data1, layout, {displayModeBar: false, displayLogo: false, responsive: true});
       }
 
+      //Store user votes
       function storeVotes() {
 
+        //WebSocket params
         let msg = {
           username: username,
           votes: votes
         }
 
+        //WebSocket message object
         let dataObj = {
           action: "storeVotes",
           data: msg
         }
 
+        //Sending message to WebSocket
         connection.send(JSON.stringify(dataObj));
-
-        console.log('message sent');
       }
 
+      //Load user data from DynamoDB
       function getUserData() {
 
+        //WebSocket params
         let msg = {
           username: username
         }
 
+        //WebSocket object
         let dataObj = {
           action: "getUserVotes",
           data: msg
         }
 
+        //WebSocket request
         connection.send(JSON.stringify(dataObj))
       }
 
-      // setInterval(() => {
-      //   storeVotes()
-      // }, 10000);
+      //Request data again after 10 seconds
+      setInterval(() => {
+        storeVotes()
+      }, 10000);
 
     </script>
   </body>

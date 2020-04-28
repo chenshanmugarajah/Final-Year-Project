@@ -11,7 +11,6 @@
 
 <body>
     <div class="container">
-
         <div class="header">
             <div class="title">
                 <h2>RAPID</h2>
@@ -24,13 +23,11 @@
                 </ul>
             </div>
         </div>
-
         <div class="main user-box">
           <h1>Login</h1>
           <% if (messages.error) { %>
              <%= messages.error  %>
           <% } %>  
-        
           <form action="/Login" method="post">
             <div>
               <label for="username">Username</label>
@@ -42,14 +39,9 @@
             </div>
             <button type="submit">Login</button>
           </form>
-
         </br>
-
           <a href="/register">or Register</a>        
-
         </div>
-        
-
     </div>
 </body>
 </html>
