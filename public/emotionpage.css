@@ -1,7 +1,16 @@
+@import url("https://rsms.me/inter/inter.css");
+html {
+  font-family: "Inter", sans-serif;
+}
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: "Inter var", sans-serif;
+  }
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
 }
 
 .container {
@@ -19,6 +28,7 @@ body {
   background-color: #254a71;
   margin: 0;
   padding: 25px 0 0 35px;
+  box-shadow: 0px 8px 14px 1px rgba(0,0,0,0.29);
 }
 
 .header .title {
@@ -66,10 +76,17 @@ body {
   margin: 10px;
 }
 
+.main h2 {
+  font-size: 40px;
+  line-height: 20px;
+}
+
 .main video {
   border: black 1px solid;
-  border-radius: 7px;
+  border-radius: 5px;
   height: 400px;
+  margin: 20px 0;
+  box-shadow: 0px 8px 14px 1px rgba(0,0,0,0.29);
 }
 
 .main button {
@@ -79,14 +96,16 @@ body {
   background-color: #254a71;
   color: white;
   border: none;
-  font-weight: bolder;
-  border-radius: 7px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  border-radius: 5px;
+  text-transform: capitalize;
+  font-family: "Inter var", sans-serif;
+  font-size: 18px;
+  line-height: 29px;
 }
 
 #image img {
   height: 200px;
+  display: none;
 }
 
 #opResult {

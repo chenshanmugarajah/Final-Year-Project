@@ -8,7 +8,7 @@
   <script src="aws-cognito-sdk.min.js"></script>
   <script src="amazon-cognito-identity.min.js"></script>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.16.0.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="emotionStyles.css" />
+  <link rel="stylesheet" type="text/css" href="emotionpage.css" />
 </head>
 
 <body class="container">
@@ -33,10 +33,11 @@
     </div>
   </div>
   <div class="main">
+    <h2>Emotion Recognition</h2>
     <canvas id="canvas" style="border: 1px solid black; display: none;"></canvas>
     <div id="username" style="display:none"><%= username %></div>
     <video id="video"></video> </br>
-    <h3>Click snap to let RED detect and store your emotion</h3>
+    <p>Click snap to have your emotion detect.</p>
     <button onclick="saveImage()">Snap</button>
     <div id="image"></div>
   </div>
@@ -211,9 +212,9 @@
     function updateCred() {
       AWS.config.update({
         region: "us-east-1",
-        accessKeyId: "ASIA2BP2RRWIEOYECNUZ",
-        secretAccessKey: "8NRsc1426IO/T1YMp6ipzGhzum+UmLDvB3fLlgcG",
-        sessionToken: "FwoGZXIvYXdzEJf//////////wEaDEBxe07z2nkh5+pIPSLEAYUGGD4jm8L43lA+FaYSrBvrREACTN8JoVqbrl6MMpHOxl7oaNnmwyEN3TU85c3pyYkL6KQ3VpQQjkHm1fDMxJTHUECs/uSbN1alMzVTJvnnYnby/u3Jn08vIeAbkG+cvrVmE5cH4Jug/4vS04SySw+Sqk8Un2K/Iz0bXKrpW7fF3XqAgw10MVQgL17IYnHLo0nPEI0yDQz6Au3FTe29x5w0qBKTnbzFfCw8LCoBt/0hotGxGziIU0NS9mGe01WgjysLTQconPuX9QUyLVAheAx0Kk5zp5tmPKvJclVmJD3O6peCLPR1Ryi/Wvv/yT7L20mvtm0Z46VK8g=="
+        accessKeyId: "ASIA2BP2RRWIO23APTMG",
+        secretAccessKey: "IISp/Z0+bU8TqFgRxYPO58Eqmm3RDeMhz5C7ABes",
+        sessionToken: "FwoGZXIvYXdzEOL//////////wEaDO4ED3jQoEf4mfyriSLEAZEW7RKHBPSA1mHWEM44L2mEB/IoNVrRaB1Mlw10DH/KIjICDFNxo8z/YFa3fkyPdBZHFCs6vpt5Kb2OH64nC7gGFDNEzJPB0SrkxoejpWuNUyU/9afA5FJIp70EW/K99lWiEGJLnwvZxUBq7oZpbKitfSouHrSHoBMWe3VumeIrvx8ksLZxVCar1oAjYYhQ40hiKd4IoGRuRKt2c1bxzda3lxbmCAF5kyucCL+hBelmQz7phn/dYdGyLTNVXz0vLygBfQco1OTg9QUyLczpo4NqWKfKtAVz006lG+k6hqePV7lDgb4FHVeUBw+dtZJ/K9LIul9M8RzVAA=="
       })
     }
 
