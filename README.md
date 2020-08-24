@@ -19,13 +19,8 @@
 ## Table of Contents
 
 * [About the Project](#about-the-project)
-  * [Built With](#built-with)
+* [Built With](#built-with)
 * [Getting Started](#getting-started)
-  * [Prerequisites](#prerequisites)
-  * [Installation](#installation)
-* [Usage](#usage)
-* [Roadmap](#roadmap)
-* [Contributing](#contributing)
 * [License](#license)
 * [Contact](#contact)
 * [Acknowledgements](#acknowledgements)
@@ -50,7 +45,7 @@ Here's why:
 
 The finished product also included a emotion recognition which had it's own dedicated page. This utilised the AWS Rekognition API to analyse the emotion expressed by a particular student upon the teacher's request.
 
-### Built With
+## Built With
 These are the major frameworks / add-ons / plugins used in the project.
 * [AWS Rekognition](https://aws.amazon.com/rekognition)
 * [AWS WebSockets with Lambda](https://aws.amazon.com/lambda/)
