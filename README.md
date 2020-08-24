@@ -35,22 +35,21 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][readme\voting-page.png]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
+The goal of the project was to create website where students can login to rooms created by a teacher to vote on the performance of the teacher. Teacher are voted against eight different categories which are designed to give the teacher feedback on how to better meet the needs of the students in the room. Some of these categories include; question - used to indicate the students have a question to ask the teacher and slow down used to tell the teacher to slow the lesson down.
 
 Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
+* Literacture review conducted by me found that students were not comfortable raising thier hands in front of 200+ students in a lecture hall.
+* A teacher is not able to cater to the needs of all students due to the size of the classroom.
+* Methods existed to improve active recall and interaction in lessons but none to convey the needds of the students in the classroom in real-time.
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue.
-
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+The finished product also included a emotion recognition which had it's own dedicated page. This utilised the AWS Rekognition API to analyse the emotion expressed by a particular student upon the teacher's request.
 
 ### Built With
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+These are the major frameworks / add-ons / plugins used in the project.
+* [AWS Rekognition](https://getbootstrap.com)
+* [AWS WebSockets](https://jquery.com)
 * [Laravel](https://laravel.com)
 
 
