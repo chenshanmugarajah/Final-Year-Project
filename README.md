@@ -10,8 +10,6 @@
   <p align="center">
     A website which allows students to rate teacher performance and allows teachers to see students engagement in lessons.
     <br />
-    <br />
-    <a href="https://github.com/chenshanmugarajah/final-year-project/readme/demo.mp4">View Demo</a>
   </p>
 </p>
 
